@@ -1,5 +1,6 @@
 from socket import * 
 import sys
+import time
 MAX_BUF = 2048
 SERV_PORT = 50000
 
@@ -14,13 +15,32 @@ def subscribe(broker_ip_address,topic_name):
 
     while True:
         sys.stdout.flush()
-        cli_sock.send(word[2].encode('utf-8'))
+        cli_sock.send((word[0]+'|'+word[2]).encode('utf-8'))
         txtout = sys.stdin.readline().strip()
         if txtout == 'quit':
             cli_sock.send(txtout.encode('utf-8'))
             break
     cli_sock.close()
+
+
+def publish(broker_ip_address,topic_name,data):
+    serv_sock_addr = (broker_ip_address, SERV_PORT)
+    cli_sock = socket(AF_INET, SOCK_STREAM)
+    cli_sock.connect(serv_sock_addr)
     
+    cli_sock.send(username.encode('utf-8'))
+
+    while True:
+        sys.stdout.flush()
+        cli_sock.send((word[0]+'|'+word[2]).encode('utf-8'))
+        txtout = sys.stdin.readline().strip()
+        if txtout == 'quit':
+            cli_sock.send(txtout.encode('utf-8'))
+            break
+    cli_sock.close()
+
+
+
 
 username = input('Enter your name: ')
 cmd = input('Enter your cmd: ')
@@ -31,7 +51,7 @@ if word[0] == "subscribe":                        #subscribe broker_ip_address �
     subscribe(broker_ip_address,topic_name)
 elif word[0] == "publish":                        #publish ’broker_ip_address’ ’topic_name’ ’data to publish’
     data = word[3]
-    #publish(broker_ip_address,topic_name,data)
+    publish(broker_ip_address,topic_name,'temp')
 else:
     print("bye")
     
