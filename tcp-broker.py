@@ -33,9 +33,19 @@ while True:
      else:
        txtout = txtin.upper()    
        conn_sock.send(txtout)
-       newToken = [txtin.decode('utf-8'), cli_sock_addr[0]]
-       mainToken.append(newToken)
-       print(mainToken)
+       txtin_d = txtin.decode('utf-8')
+       #cli_sock.send(txtout)
+       if txtin_d.split('|')[0] == "subscribe":
+          print("55555555555")
+          newToken = [txtin_d, cli_sock_addr[0]]
+          mainToken.append(newToken)
+          print(mainToken)
+       elif txtin_d.split('|')[0] == "publish":
+          print("22222222222")
+          for i in range(len(mainToken)):
+            if mainToken[i][0] == txtin.decode('utf-8').split('|')[1] :
+              sub(mainToken[i][1])
+
        #cli_sock.send(txtout)
        #print('send %s to subscriber'%(txtout.decode('utf-8'))
   #cli_sock.close()
