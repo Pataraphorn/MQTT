@@ -8,11 +8,11 @@ welcome_sock = socket(AF_INET, SOCK_STREAM)
 welcome_sock.bind(serv_sock_addr)
 welcome_sock.listen(1)
 print ('TCP server started ...')
-
+username=b'me'
 while True:
   conn_sock, cli_sock_addr = welcome_sock.accept()
   print ('New client connected ..')
-  username = conn_sock.recv(1024)
+  #username = conn_sock.recv(1024)
   while True:
      txtin = conn_sock.recv(1024)
      print ('%s>%s'%(username.decode('utf-8'),txtin.decode('utf-8'))) 
