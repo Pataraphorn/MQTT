@@ -17,30 +17,40 @@ welcome_sock.listen(1)
 
 print('TCP server started ...')
 while True:
-    conn_sock, cli_sock_addr = welcome_sock.accept()
-    print('New client connected ..')
-    username = conn_sock.recv(1024)
 
-    while True:
-        txtin = conn_sock.recv(1024)
-        print('%s>%s' % (username.decode('utf-8'), txtin.decode('utf-8')))
+  conn_sock, cli_sock_addr = welcome_sock.accept()
+  print ('New client connected ..')
+  username = conn_sock.recv(1024)
 
-        #token = token.append(txtin.decode('utf-8'),cli_sock_addr[0])
-        if txtin == b'quit':
-            print('Client disconnected ..')
-            print('Waiting for a new client ...')
-            break
-        else:
-            txtout = txtin.upper()
-            conn_sock.send(txtout)
-            newToken = [txtin.decode('utf-8'), cli_sock_addr[0]]
-            mainToken.append(newToken)
-            print(mainToken)
-            # cli_sock.send(txtout)
-            # print('send %s to subscriber'%(txtout.decode('utf-8'))
-    # cli_sock.close()
-    conn_sock.close()
+  while True:
+     txtin = conn_sock.recv(1024)
+     print ('%s>%s'%(username.decode('utf-8'),txtin.decode('utf-8')))
 
+     #token = token.append(txtin.decode('utf-8'),cli_sock_addr[0])
+     if txtin == b'quit':
+       print('Client disconnected ..')
+       print('Waiting for a new client ...')
+       break
+     else:
+       txtout = txtin.upper()    
+       conn_sock.send(txtout)
+       txtin_d = txtin.decode('utf-8')
+       #cli_sock.send(txtout)
+       if txtin_d.split('|')[0] == "subscribe":
+          print("55555555555")
+          newToken = [txtin_d, cli_sock_addr[0]]
+          mainToken.append(newToken)
+          print(mainToken)
+       elif txtin_d.split('|')[0] == "publish":
+          print("22222222222")
+          for i in range(len(mainToken)):
+            if mainToken[i][0] == txtin.decode('utf-8').split('|')[1] :
+              sub(mainToken[i][1])
+
+       #cli_sock.send(txtout)
+       #print('send %s to subscriber'%(txtout.decode('utf-8'))
+  #cli_sock.close()
+  conn_sock.close()
 s.close()
 
 
